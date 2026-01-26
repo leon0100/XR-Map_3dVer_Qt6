@@ -1,0 +1,10 @@
+# build folder
+/build/
+build
+# deploy folder
+out_x64
+# Qt Creator
+*.pro.user
+*.user
+*.bkp
+flasher
