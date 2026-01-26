@@ -42,26 +42,23 @@ QVector<RayHit> Ray::hitObject(std::weak_ptr<SceneObject> object, HittingMode hi
 QVector<RayHit> Ray::pickAsVertex(std::weak_ptr<SceneObject> object)
 {
     auto sharedObject{ object.lock() };
-    if(!sharedObject)
-        return {};
+    if(!sharedObject) return {};
 
-    auto size{ sharedObject->cdata().size() };
-    if (size <= 0)
-        return {};
+    auto size{ sharedObject->cdata().size()};
+    if (size <= 0) return {};
 
     RayHit hit;
     hit.setObject(object);
 
     auto lastDistance{ sharedObject->cdata().first().distanceToLine(m_origin, m_direction) };
-    if (!std::isfinite(lastDistance))
+    if (!std::isfinite(lastDistance)) {
         lastDistance = FLT_MAX;
+    }
 
     for (int i = 1; i < size; ++i) {
         auto p{ sharedObject->cdata().at(i) };
-
         auto currDistance{ p.distanceToLine(m_origin, m_direction) };
-        if (!std::isfinite(currDistance))
-            currDistance = FLT_MAX;
+        if (!std::isfinite(currDistance))  currDistance = FLT_MAX;
 
         if (currDistance < lastDistance) {
             lastDistance = currDistance;

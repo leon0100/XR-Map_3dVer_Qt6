@@ -147,15 +147,9 @@ void RayCaster::pickAsTriangles(std::shared_ptr<SceneObject> object)
     auto size = object->cdata().size();
 
     for (int i = 0; i < size; i+=3){
-
-        Triangle<float> triangle { object->cdata().at(i),
-                                   object->cdata().at(i+1),
-                                   object->cdata().at(i+2) };
-
+        Triangle<float> triangle { object->cdata().at(i), object->cdata().at(i+1), object->cdata().at(i+2) };
         QVector3D intersectionPoint;
-
         bool intersects = triangle.intersectsWithLine(m_origin, m_direction, intersectionPoint, true);
-
         if (intersects) {
             RayCasterHit hit;
             hit.setIndices(i, i+3);
@@ -181,30 +175,17 @@ void RayCaster::pickAsQuads(std::shared_ptr<SceneObject> object)
 
     for (int i = 0; i < size; i+=4){
 
-        Quad <float> quad(
-                           object->cdata().at(i),
-                           object->cdata().at(i+1),
-                           object->cdata().at(i+2),
-                           object->cdata().at(i+3)
-                        );
+        Quad <float> quad(object->cdata().at(i), object->cdata().at(i+1), object->cdata().at(i+2), object->cdata().at(i+3));
 
         QVector3D intersectionPoint;
-
         bool intersects = quad.intersectsWithLine(m_origin, m_direction, intersectionPoint, true);
-
         if (intersects){
             RayCasterHit hit;
             hit.setIndices(i, i+4);
             hit.setWorldIntersection(intersectionPoint);
             hit.setSourceObject(object);
-            hit.setSourcePrimitive({
-                                {   quad.A().toQVector3D(),
-                                    quad.B().toQVector3D(),
-                                    quad.C().toQVector3D(),
-                                    quad.D().toQVector3D()
-                                },
-                                GL_QUADS
-                                });
+            hit.setSourcePrimitive({ {   quad.A().toQVector3D(), quad.B().toQVector3D(),
+                                    quad.C().toQVector3D(), quad.D().toQVector3D() }, GL_QUADS });
             m_hits.append(hit);
         }
     }

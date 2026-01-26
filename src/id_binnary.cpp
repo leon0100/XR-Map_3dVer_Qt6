@@ -200,6 +200,7 @@ Resp IDBinDist::parsePayload(FrameParser &proto) {
     return respOk;
 }
 
+//这个涉及到解析深度值
 Resp IDBinChart::parsePayload(FrameParser &proto) {
     // qDebug() << "IDBinChart::parsePayload..........." << proto.ver();
     if(proto.ver() == v0 || proto.ver() == v1) {

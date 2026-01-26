@@ -743,9 +743,9 @@ void GraphicsScene3dView::setDataset(Dataset *dataset)
     QObject::connect(datasetPtr_, &Dataset::bottomTrackUpdated,
                      this,      [this](const ChannelId& channelId, int lEpoch, int rEpoch, bool manual, bool redrawAll) -> void {
                          auto chList = datasetPtr_->channelsList();
-                         if (!datasetPtr_ || chList.empty() || chList.first().channelId_ != channelId) {
-                             return;
-                         }
+                         // if (!datasetPtr_ || chList.empty() || chList.first().channelId_ != channelId) {
+                         //     return;
+                         // }
                          clearComboSelectionRect();
                          m_bottomTrack->isEpochsChanged(lEpoch, rEpoch, manual, redrawAll);//最终触发了绘制等高线
 

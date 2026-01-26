@@ -122,6 +122,7 @@ void DataHorizon::onAddedAttitude(uint64_t indx)
 void DataHorizon::onAddedBottomTrack(uint64_t indx)
 {
     // qDebug() << "DataHorizon::onAddedBottomTrack" << indx;
+    emit bottomTrackAdded(indx);
 
     if (indx < bottomTrackIndx_) { // discard changes by editing bTr on plot
         return;

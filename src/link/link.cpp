@@ -480,7 +480,8 @@ void Link::setAttribute(LinkAttribute attribute) {
 
 bool Link::writeFrame(FrameParser frame)
 {
-    return  attribute_ == LinkAttribute::kLinkAttributeNone && frame.isComplete() && write(QByteArray((const char*)frame.frame(), frame.frameLen()));
+    return  attribute_ == LinkAttribute::kLinkAttributeNone && frame.isComplete()
+           && write(QByteArray((const char*)frame.frame(), frame.frameLen()));
 }
 
 bool Link::write(QByteArray data)

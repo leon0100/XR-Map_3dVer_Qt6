@@ -278,6 +278,7 @@ void IsobathsProcessor::fullRebuildLinesLabels()
     filterNearbyLabels(resLabels, labels_);
     lineSegments_ = std::move(resLines);
 
+    qDebug() << "IsobathsProcessor::fullRebuildLinesLabels2222222222222222222";
     QMetaObject::invokeMethod(dataProcessor_, "postState", Qt::QueuedConnection, Q_ARG(DataProcessorType, DataProcessorType::kUndefined));
     QMetaObject::invokeMethod(dataProcessor_, "postIsobathsLineSegments", Qt::QueuedConnection, Q_ARG(QVector<QVector3D>, lineSegments_));
     QMetaObject::invokeMethod(dataProcessor_, "postIsobathsLabels", Qt::QueuedConnection, Q_ARG(QVector<IsobathUtils::LabelParameters>, labels_));

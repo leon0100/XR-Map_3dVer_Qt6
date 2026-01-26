@@ -357,7 +357,6 @@ void Core::openLogFile(const QString& filePath, bool isAppend, bool onCustomEven
 
         QMetaObject::invokeMethod(dataProcessor_, "setIsOpeningFile", Qt::QueuedConnection, Q_ARG(bool, true));
 
-
         datasetPtr_->setState(Dataset::DatasetState::kFile);
 
         emit deviceManagerWrapperPtr_->sendOpenFile(localfilePath);

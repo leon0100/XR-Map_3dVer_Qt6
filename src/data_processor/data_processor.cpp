@@ -400,13 +400,13 @@ void DataProcessor::runCoalescedWork()
 {
     qDebug() << "DataProcessor::runCoalescedWork..................";
 
-    if (jobRunning_.load()) {
-        return;
-    }
+    // if (jobRunning_.load()) {
+    //     return;
+    // }
 
-    if (!isCanStartCalculations()) {
-        return;
-    }
+    // if (!isCanStartCalculations()) {
+    //     return;
+    // }
 
     const uint32_t maskNow = requestedMask_.exchange(0);
     const bool wantSurface  = maskNow & WF_Surface;
@@ -494,6 +494,7 @@ void DataProcessor::postState(DataProcessorType s)
 
 void DataProcessor::postDistCompletedByProcessing(int epIndx, const ChannelId &channelId, float dist)
 {
+    // qDebug() << "DataProcessor::postDistCompletedByProcessing...............";
     emit distCompletedByProcessing(epIndx, channelId, dist);
 }
 

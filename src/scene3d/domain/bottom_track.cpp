@@ -6,8 +6,7 @@
 #include <QOpenGLExtraFunctions>
 #include <QHash>
 
-BottomTrack::BottomTrack(GraphicsScene3dView* view, QObject* parent) :
-    SceneObject(new BottomTrackRenderImplementation, view, parent),
+BottomTrack::BottomTrack(GraphicsScene3dView* view, QObject* parent) : SceneObject(new BottomTrackRenderImplementation, view, parent),
     datasetPtr_(nullptr)
 {
     setPrimitiveType(GL_LINE_STRIP);
@@ -152,6 +151,7 @@ void BottomTrack::actionEvent(ActionEvent actionEvent)
 
 void BottomTrack::isEpochsChanged(int lEpoch, int rEpoch, bool manual, bool redrawAll)
 {
+    qDebug() << "BottomTrack::isEpochsChanged...............";
     if (datasetPtr_ && datasetPtr_->getLastBottomTrackEpoch() != 0) {
         auto datasetChannels = datasetPtr_->channelsList();
         if (!datasetChannels.isEmpty()) {
@@ -390,6 +390,8 @@ void BottomTrack::keyPressEvent(Qt::Key key)
     }
 }
 
+
+#include <random>
 void BottomTrack::updateRenderData(int lEpIndx, int rEpIndx, bool redraw, bool manually) //
 {
     qDebug() << "BottomTrack::updateRenderData...................";
@@ -442,7 +444,13 @@ void BottomTrack::updateRenderData(int lEpIndx, int rEpIndx, bool redraw, bool m
         else {
             if (auto* ep = datasetPtr_->fromIndex(epIndx); ep) {
                 if (auto pos = ep->getSonarPosition().ned; pos.isCoordinatesValid()) {
-                    const float dist = -1.f * static_cast<float>(ep->distProccesing(visibleChannel_.channelId_));
+                    float dist = -1.f * static_cast<float>(ep->distProccesing(visibleChannel_.channelId_));
+
+                    //nie:test20260126
+                    std::random_device rd;
+                    std::mt19937 gen(rd());
+                    std::uniform_real_distribution<double> dis(0.0, 50.0);
+                    dist = dis(gen);
                     prepData.push_back(QVector3D(pos.n, pos.e, dist));
 
                     epIndxUpdated.push_back(epIndx);

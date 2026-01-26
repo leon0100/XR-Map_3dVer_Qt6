@@ -998,8 +998,16 @@ void Dataset::interpolateData(bool fromStart)
     interpolator_.interpolateAtt(fromStart);
 }
 
+
+#include <random>
 void Dataset::onDistCompleted(int epIndx, const ChannelId& channelId, float dist)
 {
+    //测试：
+    // std::random_device rd;
+    // std::mt19937 gen(rd());
+    // std::uniform_int_distribution<> dis(0, 50);
+    // dist = dis(gen);
+    // qDebug() << "dist1 is " << dist;
     Epoch* epPtr = fromIndex(epIndx);
     if (!epPtr) {
         return;
@@ -1009,6 +1017,8 @@ void Dataset::onDistCompleted(int epIndx, const ChannelId& channelId, float dist
 
     // for all sub ch
     auto numSubChs = epPtr->getChartsSizeByChannelId(channelId);
+    // qDebug() << "numSubChs........................" << numSubChs;
+    numSubChs = 1;
     for (int subChId = 0; subChId < numSubChs; ++subChId) {
         if (epPtr->chartAvail(channelId, subChId)) {
             Epoch::Echogram* chart = epPtr->chart(channelId, subChId);
@@ -1019,6 +1029,7 @@ void Dataset::onDistCompleted(int epIndx, const ChannelId& channelId, float dist
         }
     }
 
+    settedChart = true;//test!!
     if (settedChart) {
         setLastDepth(dist);
 
@@ -1028,12 +1039,14 @@ void Dataset::onDistCompleted(int epIndx, const ChannelId& channelId, float dist
 
         int guardInterval = bottomTrackParam_.windowSize; // bottomTrack will proceed epIndx - guardInterval in next iteration
         int compIndx = epIndx > guardInterval ? epIndx - guardInterval : epIndx;
+        // qDebug() << "guardInterval:"<<guardInterval << "  epIndx" <<epIndx;
         emit bottomTrackAdded(compIndx);
     }
 }
 
 void Dataset::onLastBottomTrackEpochChanged(const ChannelId& channelId, int val, const BottomTrackParam& btP, bool manual, bool redrawAll)
 {
+    qDebug() << "Dataset::onLastBottomTrackEpochChanged.............";
     bottomTrackParam_ = btP;
     lastBottomTrackEpoch_ = val;
 

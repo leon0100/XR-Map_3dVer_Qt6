@@ -176,7 +176,6 @@ void qPlot2D::doDistProcessing(int preset, int window_size, float vertical_gap, 
             btpPtr->offset.z = offsetz;
 
 
-
             QMetaObject::invokeMethod(dataProcessorPtr_, "bottomTrackProcessing", Qt::QueuedConnection,
                                     Q_ARG(DatasetChannel, DatasetChannel(cursor_.channel1, cursor_.subChannel1)),
                                     Q_ARG(DatasetChannel, DatasetChannel(cursor_.channel2, cursor_.subChannel2)),

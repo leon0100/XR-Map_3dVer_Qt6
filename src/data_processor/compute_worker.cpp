@@ -166,6 +166,7 @@ void ComputeWorker::setMinZ(float v)
 
 void ComputeWorker::setMaxZ(float v)
 {
+    qDebug() << "ComputeWorker::setMaxZ.................";
     isobaths_.setMaxZ(v);
 }
 
@@ -196,5 +197,5 @@ void ComputeWorker::processBundle(const WorkBundle& wb)
         isobaths_.onUpdatedBottomTrackData();
     }
 
-    emit jobFinished();
+    // emit jobFinished();
 }

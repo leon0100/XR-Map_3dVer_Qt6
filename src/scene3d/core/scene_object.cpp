@@ -137,6 +137,7 @@ void SceneObject::setData(const QVector<QVector3D> &data, int primitiveType)
 
 void SceneObject::appendData(const QVector<QVector3D> &data)
 {
+    qDebug() << "SceneObject::appendData11111111111111................";
     m_renderImpl->appendData(data);
 
     Q_EMIT changed();
@@ -145,6 +146,7 @@ void SceneObject::appendData(const QVector<QVector3D> &data)
 
 void SceneObject::appendData(const QVector3D &data)
 {
+    qDebug() << "SceneObject::appendData22222222222222222................";
     m_renderImpl->appendData(data);
 
     Q_EMIT changed();

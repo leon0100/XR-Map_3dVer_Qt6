@@ -310,6 +310,7 @@ void SurfaceView::setMinZ(float minZ)
 
 void SurfaceView::setMaxZ(float maxZ)
 {
+    qDebug() << "SurfaceView::setMaxZ....." << maxZ;
     if (auto* r = RENDER_IMPL(SurfaceView); r) {
         r->maxZ_ = maxZ;
         Q_EMIT changed();

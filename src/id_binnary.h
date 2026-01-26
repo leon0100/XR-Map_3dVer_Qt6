@@ -205,9 +205,7 @@ class IDBinChart : public IDBin
 {
     Q_OBJECT
 public:
-    IDBinChart() :
-        IDBin(),
-        lossIndex_(0)
+    IDBinChart() : IDBin(), lossIndex_(0)
     {
         lossHistory_.resize(1000);
         std::fill(lossHistory_.begin(), lossHistory_.end(), 0);
