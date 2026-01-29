@@ -15,8 +15,6 @@ Rectangle {
         width: parent.width
         height: parent.height
 
-
-
         Rectangle {
             Layout.fillWidth: true
             height: 36
@@ -57,15 +55,9 @@ Rectangle {
 
             DelegateModel {
                 id: visualModel
-
                 model: core.consoleList
-
-                groups: [
-                    DelegateModelGroup { name: "selected" }
-                ]
-
+                groups: [ DelegateModelGroup { name: "selected" } ]
                 delegate: RowLayout {
-
                     TextEdit  {
                         Layout.fillWidth: true
                         text: time + "  " + payload
@@ -96,5 +88,6 @@ Rectangle {
                 focus: true
             }
         }
+
     }
 }

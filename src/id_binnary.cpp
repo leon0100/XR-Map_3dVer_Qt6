@@ -364,12 +364,14 @@ Resp IDBinAttitude::parsePayload(FrameParser &proto) {
         m_yaw = static_cast<float>(proto.read<S2>())*scale_to_deg;
         m_pitch = static_cast<float>(proto.read<S2>())*scale_to_deg;
         m_roll = static_cast<float>(proto.read<S2>())*scale_to_deg;
-    } else if(proto.ver() == v1) {
+    }
+    else if(proto.ver() == v1) {
        m_w0 = proto.read<F4>();
        m_w0 = proto.read<F4>();
        m_w0 = proto.read<F4>();
        m_w0 = proto.read<F4>();
-    } else {
+    }
+    else {
         return respErrorVersion;
     }
 

@@ -233,6 +233,18 @@ void GraphicsScene3dView::mousePressTrigger(Qt::MouseButtons mouseButton, qreal 
 {
     Q_UNUSED(keyboardKey)
 
+    //当前点x,y的经纬度坐标
+    auto toOrig = QVector3D(x, height() - y, -1.0f).unproject(m_camera->m_view * m_model, m_projection, boundingRect().toRect());
+    auto toEnd  = QVector3D(x, height() - y,  1.0f).unproject(m_camera->m_view * m_model, m_projection, boundingRect().toRect());
+    auto toDir = (toEnd - toOrig).normalized();
+    auto to = calculateIntersectionPoint(toOrig, toDir, 0);
+    NED ned;
+    ned.n = to.y();
+    ned.e = to.x();
+    ned.d = 0;
+    LLA lla(&ned, &m_camera->viewLlaRef_, m_camera->getIsPerspective());
+    qDebug() << "mousePressTrigger x:" << x << "   y:" << y << "   lati:" << lla.latitude << "   long:" << lla.longitude;
+
     wasMoved_ = false;
     clearComboSelectionRect();
 
@@ -511,8 +523,7 @@ void GraphicsScene3dView::fitAllInView()
 
     auto d = (maxSize/2.0f)/(std::tan(m_camera->fov()/2.0f)) * 2.0f;
 
-    if(d>0)
-        m_camera->setDistance(d);
+    if(d>0) m_camera->setDistance(d);
 
     m_camera->focusOnPosition(m_bounds.center());
 
@@ -743,6 +754,7 @@ void GraphicsScene3dView::setDataset(Dataset *dataset)
     QObject::connect(datasetPtr_, &Dataset::bottomTrackUpdated,
                      this,      [this](const ChannelId& channelId, int lEpoch, int rEpoch, bool manual, bool redrawAll) -> void {
                          auto chList = datasetPtr_->channelsList();
+                        //暂时注释
                          // if (!datasetPtr_ || chList.empty() || chList.first().channelId_ != channelId) {
                          //     return;
                          // }

@@ -162,25 +162,24 @@ public:
         emit changed();
     }
 
-    int themeId() { return _id; }
+    int themeId() {
+        return _id;
+    }
 
     void setConsoleVisible(bool vis) {
         _isConsoleVisible = vis;
         emit interfaceChanged();
     }
 
-    bool consoleVisible()
-    {
+    bool consoleVisible() {
         return _isConsoleVisible;
     }
 
-    int getInstrumentsGrade() const
-    {
+    int getInstrumentsGrade() const {
         return instrumentsGrade_;
     }
 
-    void setInstrumentsGrade(int instrumentsGrade)
-    {
+    void setInstrumentsGrade(int instrumentsGrade) {
         instrumentsGrade_ = instrumentsGrade;
         emit instrumentsGradeChanged();
     }

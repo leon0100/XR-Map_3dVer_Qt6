@@ -330,7 +330,7 @@ Item  {
                     implicitHeight:     theme.controlHeight * 1.3
                     implicitWidth:      theme.controlHeight * 1.3
 
-                    property bool pulse: core.dataProcessorState === 2 || core.dataProcessorState === 4
+                    property bool pulse: (core.dataProcessorState === 2) || (core.dataProcessorState === 4)
 
                     SequentialAnimation {
                         id: pulseIsobathsAnimation
@@ -396,9 +396,6 @@ Item  {
                         }
                     }
 
-                    Settings {
-                        //property alias isobathsCheckButton: isobathsCheckButton.checked
-                    }
                 }
 
                 IsobathsExtraSettings {

@@ -470,7 +470,7 @@ ApplicationWindow  {
             }
 
             GraphicsScene3dView {
-                id:                renderer
+                id: renderer
                 visible: (menuBar !== null) ? menuBar.is3DVisible : false
                 objectName: "GraphicsScene3dView"
                 Layout.fillHeight: true
@@ -813,12 +813,12 @@ ApplicationWindow  {
             }
         }
 
-        Console {
-            id:                      console_vis
-            visible:                 theme.consoleVisible
-            SplitView.minimumHeight: 150
-            SplitView.maximumHeight: mainview.height - theme.controlHeight/2 - theme.controlHeight
-        }
+        // Console {
+        //     id:                      console_vis
+        //     visible:                 theme.consoleVisible
+        //     SplitView.minimumHeight: 150
+        //     SplitView.maximumHeight: mainview.height - theme.controlHeight/2 - theme.controlHeight
+        // }
     }
 
 

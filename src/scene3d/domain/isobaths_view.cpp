@@ -30,7 +30,6 @@ void IsobathsView::setCameraDistToFocusPoint(float val)
 void IsobathsView::setLabels(const QVector<IsobathUtils::LabelParameters> &labels)
 {
     //qDebug() << "IsobathsView::setLabels" << labels.size();
-
     if (auto* r = RENDER_IMPL(IsobathsView); r) {
         r->labels_ = labels;
         Q_EMIT changed();
@@ -40,7 +39,6 @@ void IsobathsView::setLabels(const QVector<IsobathUtils::LabelParameters> &label
 void IsobathsView::setLineSegments(const QVector<QVector3D> &lineSegments)
 {
     //qDebug() << "IsobathsView::setLineSegments" << lineSegments.size();
-
     if (auto* r = RENDER_IMPL(IsobathsView); r) {
         r->lineSegments_ = lineSegments;
         Q_EMIT changed();
@@ -50,7 +48,6 @@ void IsobathsView::setLineSegments(const QVector<QVector3D> &lineSegments)
 void IsobathsView::setLineStepSize(float lineStepSize)
 {
     //qDebug() << "IsobathsView::setLineStepSize" << lineStepSize;
-
     if (auto* r = RENDER_IMPL(IsobathsView); r) {
         r->lineStepSize_ = lineStepSize;
         Q_EMIT changed();
@@ -58,17 +55,12 @@ void IsobathsView::setLineStepSize(float lineStepSize)
 }
 
 IsobathsView::IsobathsViewRenderImplementation::IsobathsViewRenderImplementation()
-    : color_(1.f, 1.f, 1.f),
-    distToFocusPoint_(10.0f),
-    lineStepSize_(3.0f)
+    : color_(1.f, 1.f, 1.f), distToFocusPoint_(10.0f), lineStepSize_(3.0f)
 {}
 
-void IsobathsView::IsobathsViewRenderImplementation::render(QOpenGLFunctions *ctx,
-                                                            const QMatrix4x4 &model,
-                                                            const QMatrix4x4 &view,
-                                                            const QMatrix4x4 &projection,
-                                                            const QMap<QString,
-                                                            std::shared_ptr<QOpenGLShaderProgram>> &spMap) const
+void IsobathsView::IsobathsViewRenderImplementation::render(QOpenGLFunctions *ctx, const QMatrix4x4 &model,
+                        const QMatrix4x4 &view, const QMatrix4x4 &projection, const QMap<QString,
+                        std::shared_ptr<QOpenGLShaderProgram>> &spMap) const
 {
     if (mVis_ || !m_isVisible || lineSegments_.isEmpty()) {
         return;
@@ -101,7 +93,7 @@ void IsobathsView::IsobathsViewRenderImplementation::render(QOpenGLFunctions *ct
         const QColor oldCol = TextRenderer::instance().getColor();
         TextRenderer::instance().setColor(QColor::fromRgbF(color_.x(), color_.y(), color_.z()));
 
-        const float sizeFromStep = lineStepSize_      * 0.20f;
+        const float sizeFromStep = lineStepSize_  * 0.20f;
         const float sizeFromDist = distToFocusPoint_  * 0.0015f;
         const float scale = qBound(0.15f, qMin(sizeFromStep, sizeFromDist), 0.30f);
 

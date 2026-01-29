@@ -28,7 +28,6 @@ void BottomTrackProcessor::setDatasetPtr(Dataset *datasetPtr)
 }
 
 
-#include <random>
 void BottomTrackProcessor::bottomTrackProcessing(const DatasetChannel &channel1, const DatasetChannel &channel2, const BottomTrackParam& btP, bool manual, bool redrawAll)
 {
     qDebug() << "BottomTrackProcessor::bottomTrackProcessing...........";
@@ -54,7 +53,6 @@ void BottomTrackProcessor::bottomTrackProcessing(const DatasetChannel &channel1,
     }
 
     qDebug() << "size:" << size << "  epoch_min_index:"<< epoch_min_index << "  epoch_max_index:" << epoch_max_index;
-
     if (epoch_max_index == epoch_min_index) {
         return;
     }
@@ -206,12 +204,10 @@ void BottomTrackProcessor::bottomTrackProcessing(const DatasetChannel &channel1,
             int di3 =  fidata*s3;
             int di4 =  fidata*s4;
             int di5 =  fidata*s5;
-
             if(di5 >= data_conv_size) { break; }
 
             int calc = (c1*cash_data[di1] + c2*cash_data[di2] + c3*cash_data[di3] + c4*cash_data[di4] + c5*cash_data[di5]);
             calc = calc*gain_slope_inv + calc*(idata);
-
             cash_data[idata] = calc;
         }
 
@@ -219,7 +215,6 @@ void BottomTrackProcessor::bottomTrackProcessing(const DatasetChannel &channel1,
         if(summ.size() < col_size) { summ.resize(col_size); }
         summ_data = (int32_t*)summ.constData();
         for(int i = istart; i < col_size; i++) { summ_data[i] += cash_data[i]; }
-
 
         constr[cash_ind].min = chart->bottomProcessing.getMin();
         constr[cash_ind].max = chart->bottomProcessing.getMax();
@@ -245,7 +240,6 @@ void BottomTrackProcessor::bottomTrackProcessing(const DatasetChannel &channel1,
 
         if(end_search_index < 0) { end_search_index = 0; }
         if(end_search_index > summ.size()) { end_search_index = summ.size(); }
-
 
         int max_val = threshold_int*btP.windowSize;
         int max_ind = -1;
@@ -293,7 +287,6 @@ void BottomTrackProcessor::bottomTrackProcessing(const DatasetChannel &channel1,
                 bottom_track[iepoch - epoch_min_index - epoch_counter/2] = distance;
             }
 
-
             // qDebug() << "distancein is  " << distance;
         }
     }
@@ -310,8 +303,6 @@ void BottomTrackProcessor::bottomTrackProcessing(const DatasetChannel &channel1,
         epoch_stop_index = size;
     }
 
-
-
     epoch_start_index = 0;
     epoch_stop_index = epoch_max_index;
     qDebug() << "222size:" << size << "  epoch_min_index:"<< epoch_min_index << "  epoch_max_index:" << epoch_max_index;
@@ -319,31 +310,40 @@ void BottomTrackProcessor::bottomTrackProcessing(const DatasetChannel &channel1,
     for(int iepoch = epoch_start_index; iepoch < epoch_stop_index; iepoch++) {
         Epoch epPtr = datasetPtr_->fromIndexCopy(iepoch);
 
-        // if(epPtr.chartAvail(channel1.channelId_, channel1.subChannelId_)) {
-        //     Epoch::Echogram* chart = epPtr.chart(channel1.channelId_, channel1.subChannelId_);
-        //     if(chart->bottomProcessing.source < Epoch::DistProcessing::DistanceSource::DistanceSourceDirectHand) {
+        if(epPtr.chartAvail(channel1.channelId_, channel1.subChannelId_)) {
+            Epoch::Echogram* chart = epPtr.chart(channel1.channelId_, channel1.subChannelId_);
+            if(chart->bottomProcessing.source < Epoch::DistProcessing::DistanceSource::DistanceSourceDirectHand) {
                 float dist = bottom_track[iepoch - epoch_min_index];
 
                 // qDebug() << "dist1 is " << dist;
                 QMetaObject::invokeMethod(dataProcessor_, "postDistCompletedByProcessing", Qt::QueuedConnection,
                     Q_ARG(int, iepoch), Q_ARG(ChannelId, channel1.channelId_), Q_ARG(float, dist));
-            // }
-        // }
-        // if(epPtr.chartAvail(channel2.channelId_, channel2.subChannelId_)) {
-        //     Epoch::Echogram* chart = epPtr.chart(channel2.channelId_, channel2.subChannelId_);
-        //     if(chart->bottomProcessing.source < Epoch::DistProcessing::DistanceSource::DistanceSourceDirectHand) {
-        //         float dist = bottom_track[iepoch - epoch_min_index];
-        //         // qDebug() << "dist2 is " << dist;
-        //         QMetaObject::invokeMethod(dataProcessor_, "postDistCompletedByProcessing", Qt::QueuedConnection,
-        //             Q_ARG(int, iepoch), Q_ARG(ChannelId, channel2.channelId_), Q_ARG(float, dist));
-        //     }
-        // }
+            }
+        }
+        if(epPtr.chartAvail(channel2.channelId_, channel2.subChannelId_)) {
+            Epoch::Echogram* chart = epPtr.chart(channel2.channelId_, channel2.subChannelId_);
+            if(chart->bottomProcessing.source < Epoch::DistProcessing::DistanceSource::DistanceSourceDirectHand) {
+                float dist = bottom_track[iepoch - epoch_min_index];
+                // qDebug() << "dist2 is " << dist;
+                QMetaObject::invokeMethod(dataProcessor_, "postDistCompletedByProcessing", Qt::QueuedConnection,
+                    Q_ARG(int, iepoch), Q_ARG(ChannelId, channel2.channelId_), Q_ARG(float, dist));
+            }
+        }
     }
 
     QMetaObject::invokeMethod(dataProcessor_, "postState", Qt::QueuedConnection, Q_ARG(DataProcessorType, DataProcessorType::kUndefined));
     QMetaObject::invokeMethod(dataProcessor_, "postLastBottomTrackEpochChanged", Qt::QueuedConnection,
                                 Q_ARG(ChannelId, channel1.channelId_), Q_ARG(int, size),
                                 Q_ARG(BottomTrackParam, btP),Q_ARG(bool, manual), Q_ARG(bool, redrawAll));
+}
+
+void BottomTrackProcessor::bottomTrackProcessing_CSV(const DatasetChannel &channel1,
+                                                     const BottomTrackParam& btP, bool manual, bool redrawAll)
+{
+    qDebug() << "bottomTrackProcessing_CSV::bottomTrackProcessing...........";
+    QMetaObject::invokeMethod(dataProcessor_, "postLastBottomTrackEpochChanged", Qt::QueuedConnection,
+                              Q_ARG(ChannelId, channel1.channelId_), Q_ARG(int, btP.indexTo),
+                              Q_ARG(BottomTrackParam, btP),Q_ARG(bool, manual), Q_ARG(bool, redrawAll));
 }
 
 bool BottomTrackProcessor::canceled() const noexcept

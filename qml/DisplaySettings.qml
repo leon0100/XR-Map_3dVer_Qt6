@@ -75,7 +75,6 @@ GridLayout {
             groupName: qsTr("Dataset")
 
             RowLayout {
-
                 CCheck {
                     id: fixBlackStripesCheckButton
                     Layout.fillWidth: true
@@ -716,14 +715,8 @@ GridLayout {
                         id: exportPathText
                         hoverEnabled: true
                         Layout.fillWidth: true
-
-                        // text: shortcuts.home // TODO
-
                         placeholderText: qsTr("Enter path")
-                        Keys.onPressed: {
-                        }
                     }
-
 
                     CButton {
                         text: "..."

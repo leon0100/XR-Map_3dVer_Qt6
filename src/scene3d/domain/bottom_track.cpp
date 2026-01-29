@@ -391,8 +391,6 @@ void BottomTrack::keyPressEvent(Qt::Key key)
 }
 
 
-#include <random>
-#include <QFile>
 void BottomTrack::updateRenderData(int lEpIndx, int rEpIndx, bool redraw, bool manually) //
 {
     qDebug() << "BottomTrack::updateRenderData...................";
@@ -428,7 +426,6 @@ void BottomTrack::updateRenderData(int lEpIndx, int rEpIndx, bool redraw, bool m
     epIndxUpdated.reserve(need);
     vertIndxUpdated.reserve(need);
 
-
     for (int epIndx = fromIndx; epIndx < toIndx; ++epIndx) {
         auto vIt = epoch2Vertex_.find(epIndx);
         if (vIt != epoch2Vertex_.end()) {
@@ -463,7 +460,9 @@ void BottomTrack::updateRenderData(int lEpIndx, int rEpIndx, bool redraw, bool m
         }
     }
 
+    //这句绘制等高线
     emit updatedPoints(epIndxUpdated, vertIndxUpdated, manually); // for dataHorizon -> dataProcessor
+
     SceneObject::appendData(prepData);
 }
 

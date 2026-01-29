@@ -137,7 +137,7 @@ void IsobathsProcessor::fullRebuildLinesLabels()
     vertMark_.clear();
     tris_.clear();
     std::unordered_map<VKey,int> vDict;
-    vDict.reserve(1 << 20); // 1 Mb
+    vDict.reserve(1 << 20); // 1Mb
 
     for (auto* tile: surfaceMeshPtr_->getTilesCRef()) {
         const auto& V = tile->getHeightVerticesCRef();
@@ -174,7 +174,8 @@ void IsobathsProcessor::fullRebuildLinesLabels()
         return;
     }
 
-    const int levelCnt = static_cast<int>((maxZ_ - minZ_) / lineStepSize_) + 1;//等深线层数
+    lineStepSize_ = 10.0;
+    const int levelCnt = static_cast<int>((maxZ_ - minZ_) / lineStepSize_) + 1; //等深线层数
 
     QHash<int, IsobathsSegVec> segsByLvl;
 
@@ -278,7 +279,7 @@ void IsobathsProcessor::fullRebuildLinesLabels()
     filterNearbyLabels(resLabels, labels_);
     lineSegments_ = std::move(resLines);
 
-    qDebug() << "IsobathsProcessor::fullRebuildLinesLabels2222222222222222222";
+    qDebug() << "IsobathsProcessor::fullRebuildLinesLabel...................";
     QMetaObject::invokeMethod(dataProcessor_, "postState", Qt::QueuedConnection, Q_ARG(DataProcessorType, DataProcessorType::kUndefined));
     QMetaObject::invokeMethod(dataProcessor_, "postIsobathsLineSegments", Qt::QueuedConnection, Q_ARG(QVector<QVector3D>, lineSegments_));
     QMetaObject::invokeMethod(dataProcessor_, "postIsobathsLabels", Qt::QueuedConnection, Q_ARG(QVector<IsobathUtils::LabelParameters>, labels_));
@@ -333,7 +334,8 @@ void IsobathsProcessor::buildPolylines(const IsobathsSegVec& segs, IsobathsPolyl
             }
         }
 
-        if (poly.size() > 1) {
+        // qDebug() << "poly.size()............" << poly.size();
+        if (poly.size() > 200) {
             polys << QVector<QVector3D>(poly.begin(), poly.end());
         }
     }

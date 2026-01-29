@@ -365,4 +365,5 @@ public:
         }
         return vec_CSV_.at(index);
     }
+    double minDepth_, maxDepth_;
 };

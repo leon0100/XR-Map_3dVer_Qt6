@@ -72,17 +72,10 @@ void SurfaceProcessor::onUpdatedBottomTrackData(const QVector<QPair<char, int>> 
         return;
     }
 
-    // for(auto it : bTrData) {
-    //     qDebug() << "bTrDatait.............: " << it.x() << "  " << it.y() << "  " << it.z();
-    // }
-
     QMetaObject::invokeMethod(dataProcessor_, "postState", Qt::QueuedConnection, Q_ARG(DataProcessorType, DataProcessorType::kSurface));
 
     auto& tr = delaunayProc_.getTriangles();
     auto& pt = delaunayProc_.getPoints();
-    for(auto it : pt) {
-        qDebug() << "qDebug():  " << it.x << " " << it.y << "  " << it.z;
-    }
 
     const auto registerTriangle = [&](int triIdx) {
         const auto& t = tr[triIdx];
@@ -307,7 +300,7 @@ void SurfaceProcessor::onUpdatedBottomTrackData(const QVector<QPair<char, int>> 
             changed.insert(tile);
         };
 
-        auto writeCellWithNeighbors = [&](int px, int py) {            
+        auto writeCellWithNeighbors = [&](int px, int py) {
             writeCell(px, py, true); // 基准点
 
             writeCell(px + stepPix, py, false); // 8-соседей
@@ -473,23 +466,18 @@ void SurfaceProcessor::onUpdatedBottomTrackData(const QVector<QPair<char, int>> 
         }
     }
 
-    const bool zChanged = !qFuzzyCompare(1.0+minZ_, 1.0+lastMinZ) || !qFuzzyCompare(1.0+maxZ_, 1.0+lastMaxZ);
-    // if (zChanged) {
-    minZ_ = -49.155;maxZ_ = -0.144;
-
-    QMetaObject::invokeMethod(dataProcessor_, "postMinZ", Qt::QueuedConnection, Q_ARG(float, minZ_));
-        QMetaObject::invokeMethod(dataProcessor_, "postMaxZ", Qt::QueuedConnection, Q_ARG(float, maxZ_));
-    // }
+     const bool zChanged = !qFuzzyCompare(1.0+minZ_, 1.0+lastMinZ) || !qFuzzyCompare(1.0+maxZ_, 1.0+lastMaxZ);
+//     // if (zChanged) {
+//         // minZ_ = -49.155;maxZ_ = -0.144;
+//         // QMetaObject::invokeMethod(dataProcessor_, "postMinZ", Qt::QueuedConnection, Q_ARG(float, minZ_));
+//         // QMetaObject::invokeMethod(dataProcessor_, "postMaxZ", Qt::QueuedConnection, Q_ARG(float, maxZ_));
+//     // }
 
     TileMap res;
     res.reserve(changedTiles.size());
     for (auto it = changedTiles.cbegin(); it != changedTiles.cend(); ++it) {
         res.insert((*it)->getUuid(), (*(*it)));
     }
-
-    // for(auto it : pt) {
-    //     qDebug() << "qDebug():.................  " << it.x << " " << it.y << "  " << it.z;
-    // }
 
     QMetaObject::invokeMethod(dataProcessor_, "postSurfaceTiles", Qt::QueuedConnection, Q_ARG(TileMap, res), Q_ARG(bool, false));
     QMetaObject::invokeMethod(dataProcessor_, "postState", Qt::QueuedConnection, Q_ARG(DataProcessorType, DataProcessorType::kUndefined));
@@ -822,7 +810,7 @@ void SurfaceProcessor::refreshAfterEdgeLimitChange()
         QMetaObject::invokeMethod(dataProcessor_, "postMaxZ", Qt::QueuedConnection, Q_ARG(float, maxZ_));
     }
 
-    // to SurfaceView все тайлы
+    // to SurfaceView 所有瓦片
     const auto& tilesRef = surfaceMeshPtr_->getTilesCRef();
     TileMap res;
     res.reserve(tilesRef.size());

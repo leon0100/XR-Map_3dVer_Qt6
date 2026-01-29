@@ -5,6 +5,7 @@
 #include <QMetaType>
 #include <QDebug>
 
+
 ComputeWorker::ComputeWorker(DataProcessor* ownerDp, Dataset* dataset, QObject* parent)
     : QObject(parent),
       dp_(ownerDp),
@@ -173,14 +174,15 @@ void ComputeWorker::bottomTrackProcessing(const DatasetChannel& ch1, const Datas
     qDebug() << "ComputeWorker::bottomTrackProcessing............";
     emit bottomTrackStarted();
 
-    bottom_.bottomTrackProcessing(ch1, ch2, p, manual, redrawAll);
+    // bottom_.bottomTrackProcessing(ch1, ch2, p, manual, redrawAll);
+    bottom_.bottomTrackProcessing_CSV(ch1, p, manual, redrawAll);
 
     emit bottomTrackFinished();
 }
 
 void ComputeWorker::processBundle(const WorkBundle& wb)
 {
-    qDebug() << "ComputeWorker::processBundle: task" <<  wb.mosaicVec.size() ;
+    qDebug() << "ComputeWorker::processBundle: task" << wb.mosaicVec.size();
     // 依次地，传感器自行向外发送信号
     if (!wb.surfaceVec.isEmpty() && !isCanceled()) {
         surface_.onUpdatedBottomTrackData(wb.surfaceVec);

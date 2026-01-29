@@ -462,7 +462,7 @@ bool Core::openXTF(const QByteArray& data)
 bool Core::openCSV(QString name, int separatorType, int firstRow, int colTime,
                    bool isUtcTime, int colLat, int colLon, int colAltitude, int colNorth, int colEast, int colUp)
 {
-    qDebug() << "name:   " <<name;
+    qDebug() << "name:   " << name;
     const QString& filePath = name;
     bool isAppend = false;
     bool onCustomEvent = false;
@@ -521,8 +521,6 @@ bool Core::openCSV(QString name, int separatorType, int firstRow, int colTime,
 
         // onChannelsUpdated();
     });
-
-
 
     return true;
 }
@@ -1298,11 +1296,15 @@ void Core::onFileStopsOpening()
     dataHorizon_->setIsFileOpening(isFileOpening_);
 }
 
-void Core::onFileStopsOpening_CSV(QVector<float>& depthVec)
+void Core::onFileStopsOpening_CSV(QVector<float>& depthVec, double minZ, double maxZ)
 {
     datasetPtr_->vec_CSV_ = depthVec;
+    datasetPtr_->minDepth_ = minZ;
+    datasetPtr_->maxDepth_ = maxZ;
     isFileOpening_ = false;
     emit sendIsFileOpening();
+    QMetaObject::invokeMethod(dataProcessor_, "postMinZ", Qt::QueuedConnection, Q_ARG(float, minZ));
+    QMetaObject::invokeMethod(dataProcessor_, "postMaxZ", Qt::QueuedConnection, Q_ARG(float, maxZ));
     dataHorizon_->setIsFileOpening(isFileOpening_);
 }
 

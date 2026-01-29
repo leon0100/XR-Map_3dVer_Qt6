@@ -26,7 +26,8 @@ public:
 
     void setBottomTrackPtr(BottomTrack* bottomTrackPtr);
     void setSurfaceMeshPtr(SurfaceMesh* surfaceMeshPtr);
-    void onUpdatedBottomTrackData(const QVector<QPair<char, int>>& indxs); // работает по индексам кеша рендера трека дна!
+    void onUpdatedBottomTrackData(const QVector<QPair<char, int>>& indxs); //基于渲染缓存索引运行的海底轨迹
+    // void onUpdatedBottomTrackData_CSV(const QVector<QPair<char, int>>& indxs);
     void setTileResolution(float tileResolution);
     void setEdgeLimit(float val);
     void rebuildColorIntervals();

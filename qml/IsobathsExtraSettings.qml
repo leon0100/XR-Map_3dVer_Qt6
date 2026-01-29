@@ -61,7 +61,6 @@ MenuFrame {
             }
         }
         RowLayout {
-            //visible: !isobathsDebugModeCheckButton.checked
             CText {
                 text: qsTr("Theme:")
             }
@@ -128,8 +127,6 @@ MenuFrame {
         }
 
         RowLayout {
-            //visible: !isobathsDebugModeCheckButton.checked
-
             CText {
                 text: qsTr("Step, m:")
                 Layout.fillWidth: true
@@ -242,7 +239,6 @@ MenuFrame {
 
                 onAccepted: {
                     var url = selectedFile.toString()
-
                     if (!url.toLowerCase().endsWith(".csv")) {
                         url += ".csv"
                     }
@@ -256,7 +252,6 @@ MenuFrame {
                 Layout.fillWidth: true
                 onClicked: Scene3DControlMenuController.onExportToCSVButtonClicked(exportSurfacePathText.text)
             }
-
 
             Settings {
                 property alias exportSurfaceFolder: exportSurfaceFileDialog.currentFolder

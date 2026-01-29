@@ -116,7 +116,7 @@ protected:
     uint8_t m_address = 0;
     bool isConsoleOut = false;
 
-    virtual Resp  parsePayload(FrameParser &proto) = 0;
+    virtual Resp parsePayload(FrameParser &proto) = 0;
     virtual void requestSpecific(ProtoBinOut &proto_out) { Q_UNUSED(proto_out) }
 
     bool checkKeyConfirm(U4 key) { return (key == m_key); }

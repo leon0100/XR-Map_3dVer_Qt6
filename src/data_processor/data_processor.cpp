@@ -237,8 +237,8 @@ void DataProcessor::bottomTrackProcessing(const DatasetChannel &ch1, const Datas
     }
 
     QMetaObject::invokeMethod(worker_, "bottomTrackProcessing", Qt::QueuedConnection,
-                              Q_ARG(DatasetChannel, ch1), Q_ARG(DatasetChannel, ch2), Q_ARG(BottomTrackParam, p),
-                              Q_ARG(bool, manual), Q_ARG(bool, redrawAll));
+                            Q_ARG(DatasetChannel, ch1), Q_ARG(DatasetChannel, ch2), Q_ARG(BottomTrackParam, p),
+                            Q_ARG(bool, manual), Q_ARG(bool, redrawAll));
 }
 
 void DataProcessor::setSurfaceColorTableThemeById(int id)
@@ -399,29 +399,22 @@ void DataProcessor::onMosaicUpdated() {
 void DataProcessor::runCoalescedWork()
 {
     qDebug() << "DataProcessor::runCoalescedWork..................";
-
-    // if (jobRunning_.load()) {
-    //     return;
-    // }
-
-    // if (!isCanStartCalculations()) {
-    //     return;
-    // }
-
     const uint32_t maskNow = requestedMask_.exchange(0);
     const bool wantSurface  = maskNow & WF_Surface;
     const bool wantMosaic   = maskNow & WF_Mosaic;
     const bool wantIsobaths = maskNow & WF_Isobaths;
 
     WorkBundle wb;
-    if (wantSurface && !pendingSurfaceIndxs_.isEmpty() && (/*updateBottomTrack_ || */updateIsobaths_ || updateMosaic_)) {
+    if (wantSurface && !pendingSurfaceIndxs_.isEmpty() && (updateIsobaths_ || updateMosaic_)) {
         wb.surfaceVec.reserve(pendingSurfaceIndxs_.size());
 
         for (auto it = pendingSurfaceIndxs_.cbegin(); it != pendingSurfaceIndxs_.cend(); ++it) {
             wb.surfaceVec.append(*it);
         }
 
-        std::sort(wb.surfaceVec.begin(), wb.surfaceVec.end(), [](const QPair<char,int>& a, const QPair<char,int>& b){ return a.second < b.second; });
+        std::sort(wb.surfaceVec.begin(), wb.surfaceVec.end(), [](const QPair<char,int>& a, const QPair<char,int>& b){
+            return a.second < b.second;
+        });
 
         pendingSurfaceIndxs_.clear();
     }

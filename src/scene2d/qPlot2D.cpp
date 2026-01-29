@@ -173,7 +173,6 @@ void qPlot2D::doDistProcessing(int preset, int window_size, float vertical_gap, 
             btpPtr->maxDistance = range_max;
             btpPtr->indexFrom = 0;
             btpPtr->indexTo = datasetPtr_->size();
-            qDebug() << "datasetPtr_->size()........" << datasetPtr_->size();
             btpPtr->offset.x = offsetx;
             btpPtr->offset.y = offsety;
             btpPtr->offset.z = offsetz;

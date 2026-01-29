@@ -111,7 +111,7 @@ signals:
     void tempComplete(float val);
     void encoderComplete(float e1, float e2, float e3);
     void fileStopsOpening();
-    void fileStopsOpening_CSV(QVector<float>& depth);
+    void fileStopsOpening_CSV(QVector<float>& depth, double minZ, double maxZ);
     void chartLossesChanged();
 
     // logger

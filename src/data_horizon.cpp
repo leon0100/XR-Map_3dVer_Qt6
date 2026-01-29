@@ -45,7 +45,6 @@ void DataHorizon::setEmitChanges(bool state)
 void DataHorizon::setIsFileOpening(bool state)
 {
     qDebug() << "DataHorizon::setIsFileOpening" << state;
-
     isFileOpening_ = state;
 
     if (!isFileOpening_ && !isSeparateReading_ && emitChanges_) { // emit all

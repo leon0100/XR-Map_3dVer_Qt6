@@ -222,18 +222,14 @@ SceneObject::RenderImplementation::RenderImplementation()
 SceneObject::RenderImplementation::~RenderImplementation()
 {}
 
-void SceneObject::RenderImplementation::render(QOpenGLFunctions *ctx,
-                                               const QMatrix4x4 &mvp,
+void SceneObject::RenderImplementation::render(QOpenGLFunctions *ctx,  const QMatrix4x4 &mvp,
                                                const QMap<QString, std::shared_ptr<QOpenGLShaderProgram>> &shaderProgramMap) const
 {
-    if(!m_isVisible)
-        return;
+    if(!m_isVisible) return;
 
-    if(!shaderProgramMap.contains("static"))
-        return;
+    if(!shaderProgramMap.contains("static")) return;
 
     auto shaderProgram = shaderProgramMap["static"];
-
     if (!shaderProgram->bind()){
         qCritical() << "Error binding shader program.";
         return;
@@ -256,7 +252,8 @@ void SceneObject::RenderImplementation::render(QOpenGLFunctions *ctx,
     shaderProgram->release();
 }
 
-void SceneObject::RenderImplementation::render(QOpenGLFunctions *ctx, const QMatrix4x4 &model, const QMatrix4x4 &view, const QMatrix4x4 &projection, const QMap<QString, std::shared_ptr<QOpenGLShaderProgram> > &shaderProgramMap) const
+void SceneObject::RenderImplementation::render(QOpenGLFunctions *ctx, const QMatrix4x4 &model, const QMatrix4x4 &view,
+                const QMatrix4x4 &projection, const QMap<QString, std::shared_ptr<QOpenGLShaderProgram> > &shaderProgramMap) const
 {
     render(ctx, projection * view * model, shaderProgramMap);
 }
@@ -275,7 +272,6 @@ void SceneObject::RenderImplementation::setData(const QVector<QVector3D> &data, 
 void SceneObject::RenderImplementation::appendData(const QVector<QVector3D>& data)
 {
     qDebug() << "RenderImplementation::appendData111111111111111111..............";
-    //处时已经把NED坐标传递到此处，但没有高度或深度值
     for (const auto& itm : data) {
         m_data.append(itm);
     }

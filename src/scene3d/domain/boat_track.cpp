@@ -73,10 +73,6 @@ void BoatTrack::onPositionAdded(uint64_t indx)
     }
     lastIndx_ = toIndx;
 
-    // for(auto it : prepData) {
-    //     qDebug() << "onPositionAdded......   it.x():" << it.x() <<  "  " << it.y() << "  " << it.z();
-    // }
-
     SceneObject::appendData(prepData);
 }
 

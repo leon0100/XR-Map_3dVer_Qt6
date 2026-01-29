@@ -5,8 +5,9 @@ import QtQuick.Dialogs
 import QtCore
 
 
-/*----- 左上角的工具栏的第一个按钮（连接connection）-----*/
-ColumnLayout {
+/*----- 左上角的工具栏的第一个按钮（连接connection） -----*/
+ColumnLayout
+{
     property var dev: null
     property var devList: deviceManagerWrapper.devs
     property string filePath: pathText.text

@@ -199,7 +199,7 @@ void DeviceManager::frameInput(QUuid uuid, Link* link, Parsers::FrameParser fram
                 uint16_t ms = 0;
 
                 bool isCorrect =  prot_nmea.readTime(&h, &m, &s, &ms);
-                prot_nmea.skip();//nie:test
+                prot_nmea.skip();
                 Q_UNUSED(isCorrect);
 
                 char c = prot_nmea.readChar();
@@ -517,7 +517,6 @@ void DeviceManager::openFile_CSV(QString filePath)
         return;
     }
 
-
     Parsers::FrameParser frameParser;
     const QUuid someUuid(kFileUuidStr);
 
@@ -529,6 +528,7 @@ void DeviceManager::openFile_CSV(QString filePath)
     int skip_rows = 2;
 
     QVector<float> vec_CSV;
+    double minZ = 0.0, maxZ = 0.0;
     while (!in.atEnd()) {
         QString row = in.readLine();
         if (skip_rows > 0) {
@@ -536,26 +536,24 @@ void DeviceManager::openFile_CSV(QString filePath)
             continue;
         }
 
-
         QStringList columns = row.split(",");
         track.append(Position());
 
+        track.last().lla.latitude = columns[5].replace(QLatin1Char(','), QLatin1Char('.')).toDouble();
+        track.last().lla.longitude = columns[4].replace(QLatin1Char(','), QLatin1Char('.')).toDouble();
+        track.last().lla.altitude = columns[6].replace(QLatin1Char(','), QLatin1Char('.')).toDouble();
 
-            track.last().lla.latitude = columns[5].replace(QLatin1Char(','), QLatin1Char('.')).toDouble();
-            track.last().lla.longitude = columns[4].replace(QLatin1Char(','), QLatin1Char('.')).toDouble();
-            track.last().lla.altitude = columns[6].replace(QLatin1Char(','), QLatin1Char('.')).toDouble();
+        // track.last().ned.n = columns[1].replace(QLatin1Char(','), QLatin1Char('.')).toDouble();
+        // track.last().ned.e = columns[2].replace(QLatin1Char(','), QLatin1Char('.')).toDouble();
+        // track.last().ned.d = -columns[3].replace(QLatin1Char(','), QLatin1Char('.')).toDouble();
 
-            // track.last().ned.n = columns[1].replace(QLatin1Char(','), QLatin1Char('.')).toDouble();
-            // track.last().ned.e = columns[2].replace(QLatin1Char(','), QLatin1Char('.')).toDouble();
-            // track.last().ned.d = -columns[3].replace(QLatin1Char(','), QLatin1Char('.')).toDouble();
-
-            vec_CSV.append(track.last().lla.altitude);
+        minZ = std::min(minZ,track.last().lla.altitude);
+        maxZ = std::max(maxZ, track.last().lla.altitude);
+        vec_CSV.append(track.last().lla.altitude);
         // qDebug() << " track.last().lla.longitude:" << track.last().lla.longitude << "   latitude:" << track.last().lla.latitude;
         emit positionComplete_CSV(track.last().lla.latitude, track.last().lla.longitude,track.last().lla.altitude);
-
     }
-
-
+    qDebug() << "vec_CSV.size()........." << vec_CSV.size();
 
     file.close();
 
@@ -565,7 +563,7 @@ void DeviceManager::openFile_CSV(QString filePath)
 
     emit fileOpened();
     // emit fileStopsOpening(); //这一步使得最后将读取到的轨迹内容绘制到scene3d_view上
-    emit fileStopsOpening_CSV(vec_CSV);
+    emit fileStopsOpening_CSV(vec_CSV, minZ, maxZ);
 }
 
 
